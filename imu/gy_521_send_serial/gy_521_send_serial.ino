@@ -32,6 +32,11 @@
 // 
 
 #include <Wire.h>
+#include <Servo.h>
+
+Servo servo1;
+Servo servo2;
+
 
 
 // The name of the sensor is "MPU-6050".
@@ -782,7 +787,17 @@ void setup()
 {      
   int error;
   uint8_t c;
+  
+    #include <Servo.h> 
 
+Servo myservo;
+
+
+  servo1.attach(10);
+  servo1.write(90); 
+  servo2.attach(9);
+  servo2.write(90); 
+// set servo to mid-point
 
   Serial.begin(19200);
   /*
@@ -932,32 +947,42 @@ void loop()
   
   // Update the saved data with the latest values
   set_last_read_angle_data(t_now, angle_x, angle_y, angle_z, unfiltered_gyro_angle_x, unfiltered_gyro_angle_y, unfiltered_gyro_angle_z);
-  
-  // Send the data to the serial port
-  Serial.print(F("DEL:"));              //Delta T
-  Serial.print(dt, DEC);
-  Serial.print(F("#ACC:"));              //Accelerometer angle
-  Serial.print(accel_angle_x, 2);
-  Serial.print(F(","));
-  Serial.print(accel_angle_y, 2);
-  Serial.print(F(","));
-  Serial.print(accel_angle_z, 2);
-  Serial.print(F("#GYR:"));
-  Serial.print(unfiltered_gyro_angle_x, 2);        //Gyroscope angle
-  Serial.print(F(","));
-  Serial.print(unfiltered_gyro_angle_y, 2);
-  Serial.print(F(","));
-  Serial.print(unfiltered_gyro_angle_z, 2);
-  Serial.print(F("#FIL:"));             //Filtered angle
-  Serial.print(angle_x, 2);
-  Serial.print(F(","));
-  Serial.print(angle_y, 2);
-  Serial.print(F(","));
-  Serial.print(angle_z, 2);
-  Serial.println(F(""));
-  
-  // Delay so we don't swamp the serial port
-  delay(5);
+    float dy_gy_x= map(angle_x, -180, 180, 180, 0);
+  float dy_gy_z= map(angle_z, -180, 180, 180, 0);
+    Serial.print(angle_x);
+  Serial.print(F("X"));
+  Serial.println(angle_z);
+
+//  // Send the data to the serial port
+//  Serial.print(F("DEL:"));              //Delta T
+//  Serial.print(dt, DEC);
+//  Serial.print(F("#ACC:"));              //Accelerometer angle
+//  Serial.print(accel_angle_x, 2);
+//  Serial.print(F(","));
+//  Serial.print(accel_angle_y, 2);
+//  Serial.print(F(","));
+//  Serial.print(accel_angle_z, 2);
+//  Serial.print(F("#GYR:"));
+//  Serial.print(unfiltered_gyro_angle_x, 2);        //Gyroscope angle
+//  Serial.print(F(","));
+//  Serial.print(unfiltered_gyro_angle_y, 2);
+//  Serial.print(F(","));
+//  Serial.print(unfiltered_gyro_angle_z, 2);
+//  Serial.print(F("#FIL:"));             //Filtered angle
+//  Serial.print(angle_x, 2);
+//  Serial.print(F(","));
+//  Serial.print(angle_y, 2);
+//  Serial.print(F(","));
+//  Serial.print(angle_z, 2);
+//  Serial.println(F(""));
+
+  servo1.attach(10);
+  servo2.attach(9);
+  servo2.write(dy_gy_z); 
+  servo1.write(dy_gy_x); 
+// change delay to increase/decrease response time
+  delay(15);
+
 }
 
 
